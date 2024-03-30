@@ -9,6 +9,8 @@ Clone this repo and run `npm i` to install dependencies.
 ## Set up
 
 - Create a .env file in the root directory with the following info:
+
+  ```
   POSTGRES_HOST=127.0.0.1
   POSTGRES_DB=db_dev
   POSTGRES_USER=db_user3
@@ -18,6 +20,7 @@ Clone this repo and run `npm i` to install dependencies.
   BCRYPT_PASSWORD=speak-and-enter
   SALT_ROUNDS=10
   TOKEN_SECRET=alohomora123!
+  ```
 
 - run `docker compose up` (The database will connect with port: 5001)
 - run `docker ps` to grab the docker container id or name
@@ -57,32 +60,27 @@ Clone this repo and run `npm i` to install dependencies.
 
 #### Products
 
+```
 'products' [GET]
 'products/:id' [GET]
 'products' [POST]
+```
 
 #### User
 
+```
 'users' [GET]
 'users/:id' [GET]
 'users' [POST]
 'users/:id' [DELETE]
 'users/authenticate' [POST]
+```
 
 #### Orders
 
+```
 'orders' [GET]
 'orders/:id' [GET]
 'orders' [POST]
 'orders/addproduct' [POST]
-
-Your first task is to read the requirements and update the document with the following:
-
-- Determine the RESTful route for each endpoint listed. Add the RESTful route and HTTP verb to the document so that the frontend developer can begin to build their fetch requests.  
-  **Example**: A SHOW route: 'blogs/:id' [GET]
-
-- Design the Postgres database tables based off the data shape requirements. Add to the requirements document the database tables and columns being sure to mark foreign keys.  
-  **Example**: You can format this however you like but these types of information should be provided
-  Table: Books (id:varchar, title:varchar, author:varchar, published_year:varchar, publisher_id:string[foreign key to publishers table], pages:number)
-
-**NOTE** It is important to remember that there might not be a one to one ratio between data shapes and database tables. Data shapes only outline the structure of objects being passed between frontend and API, the database may need multiple tables to store a single shape.
+```
