@@ -1,6 +1,6 @@
 # Storefront Backend Project
 
-This repo contains a node API with Postgres and Express. You need to have docker installed and Postman to test the endpoints.
+This repo contains a node API with Postgres and Express. You need to have Docker installed to connect to Postgress, and Postman to test the endpoints.
 
 ## Instalation
 
