@@ -5,7 +5,7 @@ export type Product = {
   id?: number;
   name: string;
   price: number;
-  category: string;
+  category?: string;
 };
 
 //represetation of the db
