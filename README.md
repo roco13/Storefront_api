@@ -4,7 +4,7 @@ This repo contains a node API with Postgres and Express. You need to have Docker
 
 ## Instalation
 
-Clone this repo and run 'npm i'
+Clone this repo and run `npm i` to install dependencies.
 
 ## Set up
 
@@ -19,10 +19,10 @@ Clone this repo and run 'npm i'
   SALT_ROUNDS=10
   TOKEN_SECRET=alohomora123!
 
-- run 'docker compose up' (The database will connect with port: 5001)
-- run 'docker ps' to grab the docker container id or name
-- run 'docker exec -it <container id> bash'
-- run ' psql -h 127.0.0.1 -U db_user3 -d db_dev' to connect to postgres
+- run `docker compose up` (The database will connect with port: 5001)
+- run `docker ps` to grab the docker container id or name
+- run `docker exec -it <container id> bash`
+- run ` psql -h 127.0.0.1 -U db_user3 -d db_dev` to connect to postgres
 - run db-migrate up to create the tables
 
 ## Data Shapes
