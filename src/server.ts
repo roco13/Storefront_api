@@ -26,3 +26,5 @@ users_routes(app);
 app.listen(3001, function () {
   console.log(`starting app on: ${address}`);
 });
+
+export default app;

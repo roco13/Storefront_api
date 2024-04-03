@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const product_1 = require("../models/product");
+const verifyAuthToken_1 = __importDefault(require("../middleware/verifyAuthToken"));
 const store = new product_1.ProductStore();
 const index = async (_req, res) => {
     const products = await store.index();
@@ -36,9 +40,7 @@ const create = async (req, res) => {
 };
 const product_routes = (app) => {
     app.get('/products', index);
-    app.get('/products/:id', show);
-    app.post('/products', create);
-    // add product
-    //app.post('/products/:id', addProduct);
+    app.get('/products/:id', verifyAuthToken_1.default, show);
+    app.post('/products', verifyAuthToken_1.default, create);
 };
 exports.default = product_routes;

@@ -16,11 +16,11 @@ const verifyAuthToken = (
         throw new Error('TOKEN_SECRET is not set in the environment');
       }
       const decoded = jwt.verify(token, tokenSecret);
-      console.log('decoded', decoded);
+      //console.log('decoded', decoded);
       next();
     }
   } catch (error) {
-    console.log('error', error);
+    //console.log('error', error);
     res.status(401);
   }
 };

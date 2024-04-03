@@ -15,12 +15,12 @@ const verifyAuthToken = (req, res, next) => {
                 throw new Error('TOKEN_SECRET is not set in the environment');
             }
             const decoded = jsonwebtoken_1.default.verify(token, tokenSecret);
-            console.log('decoded', decoded);
+            //console.log('decoded', decoded);
             next();
         }
     }
     catch (error) {
-        console.log('error', error);
+        //console.log('error', error);
         res.status(401);
     }
 };

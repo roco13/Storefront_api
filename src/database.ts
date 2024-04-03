@@ -11,11 +11,7 @@ const {
   ENV
 } = process.env;
 
-console.log('ENV=', ENV);
-// console.log('host:', POSTGRES_HOST);
-// console.log('user', POSTGRES_USER);
-// console.log('password', POSTGRES_PASSWORD);
-// console.log('password2', process.env.POSTGRES_PASSWORD);
+//console.log('ENV=', ENV);
 
 const client = new Pool({
   host: POSTGRES_HOST,
@@ -24,9 +20,5 @@ const client = new Pool({
   password: POSTGRES_PASSWORD,
   port: 5001
 });
-
-// const BoundPool = client;
-// console.log('client', client);
-// console.log('typeof client', typeof client);
 
 export default client;

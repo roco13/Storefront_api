@@ -1,19 +1,19 @@
 {
     "dev": {
-      "driver":"pg",
-      "host":"127.0.0.1",
-      "database":"db_dev",
-      "user":"db_user3",
-      "password":"admin123",
+      "driver": "pg",
+      "host": "127.0.0.1",
+      "database": {"ENV": "POSTGRES_DB"},
+      "user": {"ENV": "POSTGRES_USER"},
+      "password": {"ENV": "POSTGRES_PASSWORD"},
       "port": 5001
     },
 
     "test": {
       "driver": "pg",
       "host": "127.0.0.1",
-      "database": "db_test",
-      "user": "db_user3",
-      "password": "admin123",
+      "database": {"ENV": "PG_DB_TEST"},
+      "user": {"ENV": "POSTGRES_USER"},
+      "password": {"ENV": "POSTGRES_PASSWORD"},
       "port": 5001
     }
 }
