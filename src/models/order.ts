@@ -88,10 +88,10 @@ export class OrderStore {
 
       const conn = await client.connect();
       const result = await conn.query(sql, [quantity, orderId, productId]);
-      console.log('result in addProductToOrder', result);
+      //console.log('result in addProductToOrder', result);
 
       const orderProduct = result.rows[0];
-      console.log('orderProduct in Order', orderProduct);
+      //console.log('orderProduct in Order', orderProduct);
       conn.release();
 
       return orderProduct;

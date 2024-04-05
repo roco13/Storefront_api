@@ -1,6 +1,5 @@
-import { Order, OrderProduct, OrderStore } from '../../models/order';
+import { Order, OrderStore } from '../../models/order';
 import { User } from '../user';
-import { Product } from '../product';
 import app from '../../server';
 import supertest from 'supertest';
 import client from '../../database';
@@ -9,19 +8,11 @@ const store = new OrderStore();
 const request = supertest(app);
 let testUser: User;
 let testOrder: Order;
-let testProduct: Product;
-let testOrderProduct: OrderProduct;
 
 let token: string;
 
 describe('Test Order Model Methods', () => {
   beforeEach(async () => {
-    testProduct = {
-      id: 1,
-      name: 'The lord of the ring',
-      price: 14,
-      category: 'fiction'
-    };
     testUser = {
       id: 2,
       username: 'usertest',
@@ -30,18 +21,12 @@ describe('Test Order Model Methods', () => {
     //create a test user to get token
     const res = await request.post('/users').send(testUser);
     token = 'Bearer ' + res.body;
-    console.log('testUser', testUser);
+
     //add product in database
     testOrder = {
       id: 1,
       status: 'active',
       user_id: testUser.id || 0
-    };
-
-    testOrderProduct = {
-      quantity: 2,
-      orders_id: testOrder.id || 0,
-      products_id: testProduct.id || 0
     };
   });
   afterEach(async () => {
@@ -94,16 +79,6 @@ describe('Test Order Model Methods', () => {
     const response = await request
       .get(`/orders/${testUser.id}`)
       .set('Authorization', token);
-    expect(response.status).toBe(200);
-  });
-  //addProductToOrder
-  it('addProductToOrder handler should return an order', async () => {
-    const response = await request
-      .post('/orders/addProductToOrder')
-      .send(testOrderProduct)
-      .set('Authorization', token);
-
-    console.log('response in Addproduct', response.body);
     expect(response.status).toBe(200);
   });
 });

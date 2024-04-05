@@ -27,7 +27,7 @@ const create = async (req: Request, res: Response) => {
   };
   try {
     const newProduct = await store.create(product);
-    console.log(newProduct);
+    //console.log(newProduct);
     res.json(newProduct);
   } catch (err) {
     res.status(400);

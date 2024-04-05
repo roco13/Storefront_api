@@ -23,7 +23,7 @@ describe('Test User Model Methods', () => {
       password_digest: 'test123'
     });
     token = 'Bearer ' + res.body;
-    console.log('token==', token);
+    //console.log('token==', token);
   });
 
   afterAll(async () => {
