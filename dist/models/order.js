@@ -38,13 +38,11 @@ class OrderStore {
             // Check if user exists to prevent foreign key violation
             const userSql = 'SELECT * FROM users WHERE id=($1)';
             const userResult = await conn.query(userSql, [o.user_id]);
-            console.log('userResult in create Order=', userResult);
             if (userResult.rows.length === 0) {
                 throw new Error(`User with id ${o.user_id} does not exist`);
             }
             const sql = 'INSERT INTO orders (status, user_id) VALUES($1, $2) RETURNING *';
             const result = await conn.query(sql, [o.status, o.user_id]);
-            console.log('result in create Order=', result.rows[0]);
             const order = result.rows[0];
             conn.release();
             return order;
@@ -71,16 +69,11 @@ class OrderStore {
         }
     }
     //add product to the order
-    async addProductToOrder(quantity, orderId, productId, userId) {
+    async addProductToOrder(quantity, orderId, productId) {
         try {
             const sql = 'INSERT INTO orders_products (quantity, orders_id, products_id) VALUES($1, $2, $3) RETURNING *';
             const conn = await database_1.default.connect();
-            const result = await conn.query(sql, [
-                quantity,
-                orderId,
-                productId,
-                userId
-            ]);
+            const result = await conn.query(sql, [quantity, orderId, productId]);
             console.log('result in addProductToOrder', result);
             const orderProduct = result.rows[0];
             console.log('orderProduct in Order', orderProduct);

@@ -26,6 +26,12 @@ describe('Test Product Model Methods', () => {
             category: 'fiction'
         };
         await store.create(product);
+        //create a test user to get a token
+        const res = await request.post('/users').send({
+            username: 'testUser1',
+            password_digest: 'test123'
+        });
+        token = 'Bearer ' + res.body;
     });
     afterAll(async () => {
         const conn = await database_1.default.connect();
@@ -65,22 +71,8 @@ describe('Test Product Model Methods', () => {
         expect(result).toBeDefined();
         expect(result.name).toEqual('The Hobbit');
     });
-});
-describe('App test: products test via endpoints', () => {
-    beforeAll(async () => {
-        //create a test user to get a token
-        const res = await request.post('/users').send({
-            username: 'testUser1',
-            password_digest: 'test123'
-        });
-        token = 'Bearer ' + res.body;
-    });
-    afterAll(async () => {
-        const conn = await database_1.default.connect();
-        const sql = 'DELETE FROM orders;\nALTER SEQUENCE orders_id_seq RESTART WITH 1;\nDELETE FROM products;\nALTER SEQUENCE products_id_seq RESTART WITH 1;\n';
-        await conn.query(sql);
-        conn.release();
-    });
+    //end of model tests
+    //start of endpoint tests
     //index
     it('GET to /products should return status 200', async () => {
         const response = await request.get('/products');

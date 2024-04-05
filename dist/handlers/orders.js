@@ -45,9 +45,8 @@ const addProductToOrder = async (req, res) => {
     const quantity = parseInt(req.body.quantity);
     const orderId = req.body.orders_id;
     const productId = req.body.products_id;
-    const userId = req.body.user_id;
     try {
-        const newOrder = await store.addProductToOrder(quantity, orderId, productId, userId);
+        const newOrder = await store.addProductToOrder(quantity, orderId, productId);
         res.json(newOrder);
     }
     catch (err) {

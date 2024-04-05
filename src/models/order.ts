@@ -6,6 +6,11 @@ export type Order = {
   user_id: number;
   status: string;
 };
+export type OrderProduct = {
+  quantity: number;
+  orders_id: number;
+  products_id: number;
+};
 
 //represetation of the db
 export class OrderStore {
@@ -40,14 +45,12 @@ export class OrderStore {
       // Check if user exists to prevent foreign key violation
       const userSql = 'SELECT * FROM users WHERE id=($1)';
       const userResult = await conn.query(userSql, [o.user_id]);
-      console.log('userResult in create Order=', userResult);
       if (userResult.rows.length === 0) {
         throw new Error(`User with id ${o.user_id} does not exist`);
       }
       const sql =
         'INSERT INTO orders (status, user_id) VALUES($1, $2) RETURNING *';
       const result = await conn.query(sql, [o.status, o.user_id]);
-      console.log('result in create Order=', result.rows[0]);
       const order = result.rows[0];
       conn.release();
       return order;
@@ -76,21 +79,15 @@ export class OrderStore {
   //add product to the order
   async addProductToOrder(
     quantity: number,
-    orderId: string,
-    productId: string,
-    userId: number
-  ): Promise<Order> {
+    orderId: number,
+    productId: number
+  ): Promise<OrderProduct> {
     try {
       const sql =
         'INSERT INTO orders_products (quantity, orders_id, products_id) VALUES($1, $2, $3) RETURNING *';
 
       const conn = await client.connect();
-      const result = await conn.query(sql, [
-        quantity,
-        orderId,
-        productId,
-        userId
-      ]);
+      const result = await conn.query(sql, [quantity, orderId, productId]);
       console.log('result in addProductToOrder', result);
 
       const orderProduct = result.rows[0];

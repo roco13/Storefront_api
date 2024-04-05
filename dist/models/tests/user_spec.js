@@ -25,7 +25,7 @@ describe('Test User Model Methods', () => {
             password_digest: 'test123'
         });
         token = 'Bearer ' + res.body;
-        //console.log('token==', token);
+        console.log('token==', token);
     });
     afterAll(async () => {
         const conn = await database_1.default.connect();
@@ -85,23 +85,8 @@ describe('Test User Model Methods', () => {
             expect(result.username).toEqual(user.username);
         }
     });
-});
-describe('App test: users test via endpoints', () => {
-    beforeAll(async () => {
-        //create a test user to get token
-        const res = await request.post('/users').send({
-            username: 'testUser1',
-            password_digest: 'test123'
-        });
-        token = 'Bearer ' + res.body;
-        //console.log('token==', token);
-    });
-    afterAll(async () => {
-        const conn = await database_1.default.connect();
-        const sql = 'DELETE FROM orders;\nALTER SEQUENCE orders_id_seq RESTART WITH 1;\nDELETE FROM users;\nALTER SEQUENCE users_id_seq RESTART WITH 1;\nDELETE FROM products;\nALTER SEQUENCE products_id_seq RESTART WITH 1;\n';
-        await conn.query(sql);
-        conn.release();
-    });
+    //end of model tests
+    //start of endpoint tests
     //index
     it('GET to /users should return status 200', async () => {
         const response = await request.get('/users').set('Authorization', token);
