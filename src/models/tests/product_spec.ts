@@ -1,30 +1,39 @@
 import { Product, ProductStore } from '../product';
 import app from '../../server';
 import supertest from 'supertest';
-import bcrypt from 'bcrypt';
+import client from '../../database';
 
 const store = new ProductStore();
 const request = supertest(app);
-const testProduct = {
-  id: 1,
-  name: 'The lord of the ring',
-  price: 14,
+const testProduct: Product = {
+  id: 2,
+  name: 'The Hobbit',
+  price: 10,
   category: 'fiction'
 };
 
-const token =
-  'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyNzgsInVzZXJuYW1lIjoidGVzdFVzZXIxMSIsInBhc3N3b3JkX2RpZ2VzdCI6IiQyYiQxMCRlNE9VL2Q4Y3ZiWHEybHgvUUFoRmdPeXBHS2IyeEJSYVMyeVVBVXQzNVpCVUt3NHNOWWp1QyJ9LCJpYXQiOjE3MTIxMDk2NTd9.FiKXmrsVJ0LAtx2TJsrPlmavosJelENWewtSHGTY4IA';
+let token: string;
 
-describe('Product Model', () => {
-  beforeEach(async () => {
+describe('Test Product Model Methods', () => {
+  beforeAll(async () => {
+    //add a product to the db
     const product: Product = {
       id: 1,
-      name: 'The lord of the ring',
+      name: 'The lord of the rings',
       price: 14,
       category: 'fiction'
     };
     await store.create(product);
   });
+
+  afterAll(async () => {
+    const conn = await client.connect();
+    const sql =
+      'DELETE FROM orders;\nALTER SEQUENCE orders_id_seq RESTART WITH 1;\nDELETE FROM products;\nALTER SEQUENCE products_id_seq RESTART WITH 1;\n';
+    await conn.query(sql);
+    conn.release();
+  });
+
   it('should have an index method', () => {
     expect(store.index).toBeDefined();
   });
@@ -37,18 +46,44 @@ describe('Product Model', () => {
   it('should have a delete method', () => {
     expect(store.show).toBeDefined();
   });
-  it('show method should return the correct Product', async () => {
+  it('should list all the products from the database', async () => {
+    const result = await store.index();
+    expect(result).not.toEqual([]);
+  });
+  it('should show a product from the database', async () => {
     const result = await store.show(1);
     expect(result).toEqual({
       id: 1,
-      name: 'The lord of the ring',
+      name: 'The lord of the rings',
       price: 14,
       category: 'fiction'
     });
   });
+  it('should delete a product', async () => {
+    const newProduct: Product = await store.create(testProduct);
+    const id = newProduct.id as number;
+    const result = await store.delete(id);
+    expect(result).toBeDefined();
+    expect(result.name).toEqual('The Hobbit');
+  });
 });
 
 describe('App test: products test via endpoints', () => {
+  beforeAll(async () => {
+    //create a test user to get a token
+    const res = await request.post('/users').send({
+      username: 'testUser1',
+      password_digest: 'test123'
+    });
+    token = 'Bearer ' + res.body;
+  });
+  afterAll(async () => {
+    const conn = await client.connect();
+    const sql =
+      'DELETE FROM orders;\nALTER SEQUENCE orders_id_seq RESTART WITH 1;\nDELETE FROM products;\nALTER SEQUENCE products_id_seq RESTART WITH 1;\n';
+    await conn.query(sql);
+    conn.release();
+  });
   //index
   it('GET to /products should return status 200', async () => {
     const response = await request.get('/products');

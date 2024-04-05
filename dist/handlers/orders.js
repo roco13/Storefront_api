@@ -55,10 +55,22 @@ const addProductToOrder = async (req, res) => {
         res.json(err);
     }
 };
+const currentOrderByUser = async (req, res) => {
+    try {
+        const userId = parseInt(req.params.id);
+        const order = await store.currentOrderByUser(userId);
+        res.json(order);
+    }
+    catch (err) {
+        res.status(400);
+        res.json(err);
+    }
+};
 const orders_routes = (app) => {
     app.get('/orders', verifyAuthToken_1.default, index);
     app.get('/orders/:id', verifyAuthToken_1.default, show);
     app.post('/orders', verifyAuthToken_1.default, create);
     app.post('/orders/addproduct', verifyAuthToken_1.default, addProductToOrder);
+    app.get('/orders/:userid', verifyAuthToken_1.default, currentOrderByUser);
 };
 exports.default = orders_routes;

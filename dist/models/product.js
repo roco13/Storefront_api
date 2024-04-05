@@ -47,9 +47,13 @@ class ProductStore {
     async delete(id) {
         try {
             const conn = await database_1.default.connect();
-            const sql = 'DELETE FROM products WHERE id=($1)';
+            // Fetch the product before deleting it
+            let sql = 'SELECT * FROM products WHERE id=($1)';
             const result = await conn.query(sql, [id]);
             const product = result.rows[0];
+            // Delete the product
+            sql = 'DELETE FROM products WHERE id=($1)';
+            await conn.query(sql, [id]);
             conn.release();
             return product;
         }

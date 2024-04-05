@@ -40,6 +40,7 @@ export class OrderStore {
       // Check if user exists to prevent foreign key violation
       const userSql = 'SELECT * FROM users WHERE id=($1)';
       const userResult = await conn.query(userSql, [o.user_id]);
+      console.log('userResult in create Order=', userResult);
       if (userResult.rows.length === 0) {
         throw new Error(`User with id ${o.user_id} does not exist`);
       }
@@ -52,6 +53,23 @@ export class OrderStore {
       return order;
     } catch (err) {
       throw new Error(`Could not create order. Error: ${err}`);
+    }
+  }
+
+  async currentOrderByUser(userId: number): Promise<Order | null> {
+    try {
+      const conn = await client.connect();
+      const sql = 'SELECT * FROM orders WHERE user_id=($1) AND status=($2)';
+      const result = await conn.query(sql, [userId, 'active']);
+      conn.release();
+
+      if (result.rows.length > 0) {
+        return result.rows[0];
+      } else {
+        return null;
+      }
+    } catch (err) {
+      throw new Error(`unable get current order for user ${userId}: ${err}`);
     }
   }
 

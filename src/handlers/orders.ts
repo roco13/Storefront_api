@@ -60,11 +60,21 @@ const addProductToOrder = async (
     res.json(err);
   }
 };
-
+const currentOrderByUser = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.id);
+    const order = await store.currentOrderByUser(userId);
+    res.json(order);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
+};
 const orders_routes = (app: express.Application) => {
   app.get('/orders', verifyAuthToken, index);
   app.get('/orders/:id', verifyAuthToken, show);
   app.post('/orders', verifyAuthToken, create);
   app.post('/orders/addproduct', verifyAuthToken, addProductToOrder);
+  app.get('/orders/:userid', verifyAuthToken, currentOrderByUser);
 };
 export default orders_routes;
